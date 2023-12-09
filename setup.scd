@@ -43,8 +43,8 @@ SuperDirt.default = ~dirt;
 // The samples need to exist on your computer!
 // ~dirt.loadSoundFiles("/Users/Sally/Dropbox/oily-cart-awu-samples/*");
 // ~dirt.loadSoundFiles("/Dropbox-shared/oily-cart-awu-samples/*");
-// ~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/oily-cart-awu-samples/*");
-// ~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/iklectik-202209/*");
+~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/oily-cart-awu-samples/*");
+~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/iklectik-202209/*");
 
 
 // Run to test to check we have sound. You should hear a cymbal
