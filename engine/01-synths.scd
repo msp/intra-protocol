@@ -130,7 +130,7 @@ SynthDef(\bass3, {
 	env = Env.perc(0.03, 0.6).ar(Done.none, \duck.tr);
 	freq = \freq.kr(440);
 	snd = Pulse.ar(freq * [-0.1, 0.1].midiratio, 0.5);
-	snd = MoogFF.ar(snd, 1000 * (LFNoise2.kr(1) * 10).midiratio, 1) * 10.dbamp;
+	snd = MoogFF.ar(snd, 500 * (LFNoise2.kr(1) * 10).midiratio, 1) * 10.dbamp;
 	snd = SinOsc.ar(freq) + HPF.ar(snd.tanh, 300);
 	snd = snd * (1 - env);
 	snd = snd * Env.asr(0.1, 1, 0.1).ar(Done.freeSelf, \gate.kr(1));

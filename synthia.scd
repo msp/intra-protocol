@@ -37,7 +37,7 @@ PdefAllGui(Pdef.all.size);
 // ~pacer = 0.01;
 ~durations = [3, 4, 5, 6] / 50;
 // ~durations = [0.2];
-// ~durations = [0.02];
+// ~durations = [0.04];
 ~durMult = 6;
 ~bassSustain = 2.5;
 // ~bassSustain = 1.5;
@@ -90,7 +90,12 @@ Routine({
 			~synths.do { |synth|
 				if(synth.defName == 'pad') {
 					synth.set(\duck, 1);
-				}
+				};
+
+				if(synth.defName == 'bass3') {
+					synth.set(\duck, 1);
+				};
+
 			};
 		};
 
@@ -100,7 +105,11 @@ Routine({
 		~synths.do { |synth|
 			if(synth.defName == 'pad') {
 				synth.set(\gate, 0);
-			}
+			};
+
+			if(synth.defName == 'bass3') {
+				synth.set(\gate, 0);
+			};
 		};
 
 		{ ((duration) / 2).wait; ~oscClient.sendMsg("/pulse", 0); }.fork;
