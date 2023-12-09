@@ -40,7 +40,7 @@ SynthDef(\kick, {
     snd = snd * velocity.sqrt;
     snd = snd + GVerb.ar(snd.sum * -30.dbamp, 30, 1);
     snd = snd * Env.perc(0.001, duration.min(0.6)).ar(Done.freeSelf);
-    snd = snd * -16.dbamp;
+    snd = snd * -21.dbamp;
     Out.ar(\out.kr(0), snd);
 }).add;
 
@@ -117,11 +117,12 @@ SynthDef(\pad, {
 	snd = Saw.ar(\freq.kr(440) * (LFNoise2.kr(3 ! 8) * 0.1).midiratio);
 	snd = Splay.ar(snd);
 	snd = MoogFF.ar(snd, LFNoise2.kr(3).linexp(-1, 1, 500, 1000) * (env.neg * 8).midiratio, 1.5) * 10.dbamp;
+	// uncomment me at the end!
 	// snd = Latch.ar(snd, Impulse.ar(LFNoise2.kr(3).linexp(-1, 1, 4e3, 16e3)));
 	snd = snd * (1 - env);
 	snd = snd * Env.asr(0.1, 1, 0.1).ar(Done.freeSelf, \gate.kr(1));
 	snd = snd * \amp.kr(1);
-	snd = snd * -38.dbamp;
+	snd = snd * -32.dbamp;
 	Out.ar(\out.kr(0), snd);
 }).add;
 

@@ -1,12 +1,4 @@
 
-(59 + 3 + [-3, 0, 2, 4, 7, 11]).midicps.collect { |freq| Synth(\pad, [freq: freq]) }
-
-Synth(\pad, [freq: 329.62])
-Synth(\pad, [freq: 369.99])
-
-
-Synth(\pad, [freq: 440])
-
 // boot ////////////////////////////////////////////////////////////////////////
 (
 load(~enginePath.fullPath+/+"04-osc.scd");
@@ -29,21 +21,21 @@ PdefAllGui(Pdef.all.size);
 // ctrl ////////////////////////////////////////////////////////////////////////
 (
 
-
-
-// ~speed = 1;
-~speed = 0.95;
+~speed = 1;
+// ~speed = 0.95;
 ~pacer = 1;
 // ~pacer = 0.01;
-~durations = [3, 4, 5, 6] / 50;
-// ~durations = [0.2];
+// ~durations = [3, 4, 5, 6] / 50;
+~durations = [1.4];
+///////////////////////////////////////////
+// Edit the Pad synth for the last passage!
+///////////////////////////////////////////
 // ~durations = [0.04];
 ~durMult = 6;
-~bassSustain = 2.5;
-// ~bassSustain = 1.5;
+// ~bassSustain = 2.5;
+~bassSustain = 1.5;
 // ~oscClient.sendMsg("/lfo/play", 0);
 ~oscClient.sendMsg("/lfo/play", 1);
-
 
 )
 
@@ -52,7 +44,6 @@ PdefAllGui(Pdef.all.size);
 var root = 59;
 var j = 0;
 var duration;
-
 var minPacer = 0.01;
 
 
@@ -65,7 +56,7 @@ Routine({
 		// note on
 		~synths = (
 			[Synth(\msp808, [sustain: ~bassSustain, voice: -0.4, speed: 2, att: 0.01])]
-			++ (root + j + [-3, 0, 2, 4, 7, 11]).midicps.collect { |freq| Synth(\pad, [freq: freq]) }
+			// ++ (root + j + [-3, 0, 2, 4, 7, 11]).midicps.collect { |freq| Synth(\pad, [freq: freq]) }
 			// ++ [Synth(\kick, [duration: duration])]
 			// ++ [Synth(\mspFM, [sustain: duration])]
 			// ++ [Synth(\bass3, [freq: ((root + j) - 24).midicps])]
