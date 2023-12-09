@@ -3,6 +3,7 @@
 f = {
 	"running CMD period hooks...".postln;
 	~oscClient.sendMsg("/lfo/play", 0);
+	~oscClient.sendMsg("/master/layer", 0);
 };
 
 CmdPeriod.add(f);
@@ -121,8 +122,9 @@ Routine({
 		~oscClient.sendMsg("/pulse", 1);
 		{ (duration / 2).wait; ~oscClient.sendMsg("/pulse", 0); }.fork;
 
-		// s.bind { Synth(\kick, [duration: duration]) };
-		s.bind { Synth(\mspFM, [sustain: duration]) };
+		s.bind { Synth(\kick, [duration: duration]) };
+		// s.bind { Synth(\mspFM, [sustain: duration]) };
+		// s.bind { Synth(\mspAdder, [sustain: duration]) };
 
 		if(0.05.coin) {
 			~oscClient.sendMsg("/part/tonal", 1);
@@ -162,6 +164,7 @@ Routine({
     };
 }).play;
 )
+
 
 (
 Routine({
@@ -234,7 +237,8 @@ Routine({
     ((0.8 ** (0..8)).normalizeSum * 50.0).do { |sectionDuration|
         ((0.8 ** (0..8)).normalizeSum.reverse * sectionDuration).do { |phraseDuration|
             ((0.75 ** (0..10)).normalizeSum * phraseDuration).do { |duration|
-                s.bind { Synth(\kick, [duration: duration]) };
+				s.bind { Synth(\kick, [duration: duration]) };
+				// s.bind { Synth(\mspFM, [sustain: duration]) };
                 duration.wait;
             };
         };

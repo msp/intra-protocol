@@ -40,7 +40,7 @@ SynthDef(\kick, {
     snd = snd * velocity.sqrt;
     snd = snd + GVerb.ar(snd.sum * -30.dbamp, 30, 1);
     snd = snd * Env.perc(0.001, duration.min(0.6)).ar(Done.freeSelf);
-    snd = snd * -3.dbamp;
+    snd = snd * -16.dbamp;
     Out.ar(\out.kr(0), snd);
 }).add;
 
@@ -108,6 +108,34 @@ SynthDef(\acid, {
 	snd = snd * Env.asr(0.001, 1, 0.03).ar(Done.freeSelf, \gate.kr(1));
 	snd = snd * -20.dbamp;
 	snd = Pan2.ar(snd, \pan.kr(0));
+	Out.ar(\out.kr(0), snd);
+}).add;
+
+SynthDef(\pad, {
+	var snd, env, pitchEnv;
+	env = Env.perc(0.03, 0.5).ar(Done.none, \duck.tr);
+	snd = Saw.ar(\freq.kr(440) * (LFNoise2.kr(3 ! 8) * 0.1).midiratio);
+	snd = Splay.ar(snd);
+	snd = MoogFF.ar(snd, LFNoise2.kr(3).linexp(-1, 1, 500, 1000) * (env.neg * 8).midiratio, 1.5) * 10.dbamp;
+	// snd = Latch.ar(snd, Impulse.ar(LFNoise2.kr(3).linexp(-1, 1, 4e3, 16e3)));
+	snd = snd * (1 - env);
+	snd = snd * Env.asr(0.1, 1, 0.1).ar(Done.freeSelf, \gate.kr(1));
+	snd = snd * \amp.kr(1);
+	snd = snd * -38.dbamp;
+	Out.ar(\out.kr(0), snd);
+}).add;
+
+SynthDef(\bass3, {
+	var snd, env, freq;
+	env = Env.perc(0.03, 0.6).ar(Done.none, \duck.tr);
+	freq = \freq.kr(440);
+	snd = Pulse.ar(freq * [-0.1, 0.1].midiratio, 0.5);
+	snd = MoogFF.ar(snd, 1000 * (LFNoise2.kr(1) * 10).midiratio, 1) * 10.dbamp;
+	snd = SinOsc.ar(freq) + HPF.ar(snd.tanh, 300);
+	snd = snd * (1 - env);
+	snd = snd * Env.asr(0.1, 1, 0.1).ar(Done.freeSelf, \gate.kr(1));
+	snd = snd * \amp.kr(1);
+	snd = snd * -25.dbamp;
 	Out.ar(\out.kr(0), snd);
 }).add;
 
@@ -498,6 +526,7 @@ SynthDef(\msp808, {|out, speed=1, sustain=1, pan, voice=0, att = 0.01, n |
 
     // sound = Mix.new([ kick, synth ]);
     sound = kick;
+	sound = sound * -16.dbamp;
 
     OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, env))
 }).add;
