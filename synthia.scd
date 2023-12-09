@@ -7,19 +7,39 @@ Synth(\pad, [freq: 369.99])
 
 Synth(\pad, [freq: 440])
 
+// boot ////////////////////////////////////////////////////////////////////////
+(
+load(~enginePath.fullPath+/+"04-osc.scd");
+
+f = {
+	"running CMD period hooks...".postln;
+	~oscClient.sendMsg("/lfo/play", 0);
+	~oscClient.sendMsg("/master/layer", 0);
+};
+
+CmdPeriod.add(f);
+
+)
 
 // ctrl ////////////////////////////////////////////////////////////////////////
 (
+
+
 
 // ~speed = 1;
 ~speed = 0.95;
 ~pacer = 1;
 // ~pacer = 0.01;
 ~durations = [3, 4, 5, 6] / 50;
+// ~durations = [0.2];
 // ~durations = [0.02];
 ~durMult = 6;
 ~bassSustain = 2.5;
 // ~bassSustain = 1.5;
+// ~oscClient.sendMsg("/lfo/play", 0);
+~oscClient.sendMsg("/lfo/play", 1);
+
+
 )
 
 // pttn ////////////////////////////////////////////////////////////////////////
@@ -41,7 +61,7 @@ Routine({
 		~synths = (
 			[Synth(\msp808, [sustain: ~bassSustain, voice: -0.4, speed: 2, att: 0.01])]
 			++ (root + j + [-3, 0, 2, 4, 7, 11]).midicps.collect { |freq| Synth(\pad, [freq: freq]) }
-			++ [Synth(\kick, [duration: duration])]
+			// ++ [Synth(\kick, [duration: duration])]
 			// ++ [Synth(\mspFM, [sustain: duration])]
 			// ++ [Synth(\bass3, [freq: ((root + j) - 24).midicps])]
 		);
@@ -52,10 +72,12 @@ Routine({
 			duration = duration * ~durMult;
 			// s.bind { fx.set(\trigger, 1); };
 			~oscClient.sendMsg("/fx/trigger", 1);
+			~oscClient.sendMsg("/part/tonal", 1);
 			~oscClient.sendMsg("/shader/invert", 1);
 		} {
 			// s.bind { fx.set(\trigger, 1); };
 			~oscClient.sendMsg("/fx/trigger", 0);
+			~oscClient.sendMsg("/part/tonal", 0);
 			~oscClient.sendMsg("/shader/invert", 0);
 		};
 
