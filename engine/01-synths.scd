@@ -1,6 +1,6 @@
 (
 
-var lfo;
+~lfo;
 // ~rbus = Bus.audio(s,2);
 // ~reverbGroup = Group.new;
 
@@ -15,12 +15,40 @@ SynthDef(\simpleSine,
 
 //// intra protocaol ///////////////////////////////////////////////////////////
 
-lfo = { |rate = 1|
+~lfo = { |rate = 1|
 	Select.ar(ToggleFF.ar(Dust.ar(rate)), [
 		LFNoise2.ar(rate),
 		TRand.ar(-1, 1, Dust.ar(rate * 3)),
 	]);
 };
+
+SynthDef(\pluck, {
+	var snd, freq;
+	freq = 60 * \transpose.kr(0).midiratio;
+	snd = Pulse.ar(freq * [-0.1, 0.1].midiratio);
+	snd = MoogFF.ar(snd, Env.perc(0.001, 0.2).ar.linexp(0, 1, 100, 8000), 1);
+	snd = snd * (1 + (SinOsc.ar(963) * Env.perc(0, 0.1).ar));
+	snd = snd * Env.perc(0.001, 0.2, curve: -1).ar;
+	snd = snd + (GVerb.ar(snd.sum, 20, 1) * -12.dbamp);
+	snd = snd * Env.perc(0.001, 0.5, curve: -1).ar(Done.freeSelf);
+	snd = snd * \amp.kr(1);
+	snd = snd * 3.dbamp;
+	Out.ar(\out.kr(0), snd);
+}).add;
+
+
+SynthDef(\ghostKick, {
+	var snd;
+	snd = SinOsc.ar(49 * (1 + (5 * Env.perc(0, 0.1, curve: -8).ar)) * (1 + (0.4 * Env.perc(0, 0.2, curve: -2).ar)));
+	snd = snd + (SinOsc.ar(XLine.ar(4000, 100, 0.03)) * Env.perc(0.002, 0.03).ar);
+	snd = snd + (BPF.ar(Hasher.ar(Sweep.ar), 8130, 0.5) * Env.perc(0.001, 0.03).ar * -9.dbamp);
+	snd = snd * (1 + Env.perc(0.0, 0.5).ar);
+	snd = snd.tanh;
+	snd = snd * Env.perc(0.001, 0.1, curve: -4).ar(Done.freeSelf);
+	snd = snd * -14.dbamp;
+	snd = snd ! 2;
+	Out.ar(\out.kr(0), snd);
+}).add;
 
 SynthDef(\kick, {
     var snd, duration, velocity;
@@ -69,9 +97,9 @@ SynthDef(\weirdBass, {
 	var snd, rate, duration;
 	duration = \duration.kr(1);
 	rate = 1;
-	snd = SinOsc.ar(90 * (2 ** lfo.(rate)));
-	snd = (snd * lfo.(rate).linlin(-1, 1, 0, 20).lag(0.05).dbamp).fold2;
-	snd = RLPF.ar(snd, lfo.(rate).lag(0.01).linexp(-1, 1, 1000, 2000), 0.3);
+	snd = SinOsc.ar(90 * (2 ** ~lfo.(rate)));
+	snd = (snd * ~lfo.(rate).linlin(-1, 1, 0, 20).lag(0.05).dbamp).fold2;
+	snd = RLPF.ar(snd, ~lfo.(rate).lag(0.01).linexp(-1, 1, 1000, 2000), 0.3);
 	snd = PitchShift.ar(snd, ExpRand(0.01, 0.04), XLine.kr(ExpRand(0.5, 1), ExpRand(0.5, 1), duration)) * 20.dbamp;
 	snd = BLowShelf.ar(snd, 500, 0.3, 5);
 	snd = Limiter.ar(snd);
@@ -118,7 +146,7 @@ SynthDef(\pad, {
 	snd = Splay.ar(snd);
 	snd = MoogFF.ar(snd, LFNoise2.kr(3).linexp(-1, 1, 500, 1000) * (env.neg * 8).midiratio, 1.5) * 10.dbamp;
 	// uncomment me at the end!
-	// snd = Latch.ar(snd, Impulse.ar(LFNoise2.kr(3).linexp(-1, 1, 4e3, 16e3)));
+	snd = Latch.ar(snd, Impulse.ar(LFNoise2.kr(3).linexp(-1, 1, 4e3, 16e3)));
 	snd = snd * (1 - env);
 	snd = snd * Env.asr(0.1, 1, 0.1).ar(Done.freeSelf, \gate.kr(1));
 	snd = snd * \amp.kr(1);
@@ -159,14 +187,14 @@ SynthDef(\fx, {
 	trigComb2 = TRand.ar(0, 1, trigger);
 	trigLatch = TRand.ar(0, 1, trigger);
 	// probs
-	probability = 0.03;
+	probability = 0.003;
 	// probability = 0.4;
-	pitchShiftProbability = 0.3;
+	pitchShiftProbability = 0.0003;
 	// pitchShiftProbability = 0;
 	filterProbability = 0.2;
 	// filterProbability = 0;
-	reverbProbability = probability;
-	comb1Probability = probability;
+	reverbProbability = 0.1;
+	comb1Probability = 0.1;
 	comb2Probability = probability;
 	latchProbability = probability;
 
@@ -174,9 +202,9 @@ SynthDef(\fx, {
 
 		snd = Select.ar((trigReverb < reverbProbability).lag(0.01), [snd, GVerb.ar(snd.sum, Rand(1, 3), Rand(1, 3)) * -5.dbamp]);
 		snd = LeakDC.ar(snd);
-		snd = Select.ar((trigComb1 < comb1Probability).lag(0.01), [snd, CombC.ar(snd, 0.2, 1 / lfo.(3).lag(0.01).linexp(-1, 1, 10, 300), 0.1)]);
-		snd = Select.ar((trigComb2 < comb2Probability).lag(0.01), [snd, CombC.ar(snd, 0.2, 1 / lfo.(3).lag(0.01).linexp(-1, 1, 10, 3000), 0.2)]);
-		snd = Select.ar((trigLatch < latchProbability).lag(0.01), [snd, Latch.ar(snd, Impulse.ar(lfo.(1).linexp(-1, 1, 100, 16e3)))]);
+		snd = Select.ar((trigComb1 < comb1Probability).lag(0.01), [snd, CombC.ar(snd, 0.2, 1 / ~lfo.(3).lag(0.01).linexp(-1, 1, 10, 300), 0.1)]);
+		snd = Select.ar((trigComb2 < comb2Probability).lag(0.01), [snd, CombC.ar(snd, 0.2, 1 / ~lfo.(3).lag(0.01).linexp(-1, 1, 10, 3000), 0.2)]);
+		snd = Select.ar((trigLatch < latchProbability).lag(0.01), [snd, Latch.ar(snd, Impulse.ar(~lfo.(1).linexp(-1, 1, 100, 16e3)))]);
 	};
 
 	SendReply.kr(\trigger.tr, '/fxTrigPitchShift', trigPitchShift < pitchShiftProbability);
@@ -190,7 +218,7 @@ SynthDef(\fx, {
 		(trigPitchShift < pitchShiftProbability).lag(0.01),
 		[
 			snd,
-			snd + PitchShift.ar(snd, 0.03, lfo.(2).linexp(-1, 1, 1, 4))
+			snd + PitchShift.ar(snd, 0.03, ~lfo.(2).linexp(-1, 1, 1, 4))
 		]
 	);
 	snd = Select.ar(
@@ -204,7 +232,7 @@ SynthDef(\fx, {
 	snd = BHiShelf.ar(snd, 3000, 0.3, -3);
 	snd = BLowShelf.ar(snd, 300, 0.3, 5);
 	snd = Limiter.ar(snd);
-	snd = snd * -5.dbamp;
+	snd = snd * -12.dbamp;
 	ReplaceOut.ar(\out.kr(0), snd);
 }).add;
 
@@ -458,9 +486,11 @@ SynthDef(\mspLaser,{
         // EnvGen.ar(Env.perc(att*tscale[i], 0.5*tscale[i], 0.2*ascale[i] ), timeScale:sustain*5)
         // * SinOsc.ar(freq * freqlist[i] * Line.kr(1, 1+accelerate, sustain))
 
-        EnvGen.ar(envShape, timeScale:sustain*5)
+        EnvGen.ar(envShape, timeScale:sustain*5, doneAction:2)
         * SinOsc.ar(freq * freqlist[i] * Line.kr(1, 1+accelerate, sustain))
     });
+
+	sound = sound * \amp.kr(1);
 
     OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
 }).add;
@@ -502,8 +532,10 @@ SynthDef(\mspplucklead, {
 
     // var filterEnv = (2500*(envGen**4.8))+DC.ar(10);
     var filterEnv = XLine.kr(2500, 10, 0.3, 1);
-    sound = RLPF.ar(sound, filterEnv, 0.5);
-    // sound = Resonz.ar(sound, filterEnv, 2, 3);
+	// sound = RLPF.ar(sound, filterEnv, 0.5);
+	sound = Resonz.ar(sound, filterEnv, 2, 3);
+
+	sound = sound * \amp.kr(1);
 
     Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, envGen));
 }).add;
@@ -543,6 +575,7 @@ SynthDef(\mspSuperHat, {|out, sustain=1, pan, accelerate, n |
     accel = Line.kr(1, 1+accelerate, 0.2*sustain);
     freq = 2000*accel*(n/5 + 1).wrap(0.5,2);
     sound = HPF.ar(LPF.ar(WhiteNoise.ar(1), 3*freq), freq);
+	sound = sound * \amp.kr(1);
     OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, env))
 }).add
 );
@@ -589,7 +622,7 @@ SynthDef(\mspSuperzow, {
     sound = sound - DelayN.ar(sound2,0.2, Line.ar(0,1,5*sustain/slide)/basefreq)
     + DelayN.ar(sound3,0.2, Line.ar(0,1,20*sustain/slide)/basefreq);
 
-
+	sound = sound * \amp.kr(1);
 
     OffsetOut.ar(out, DirtPan.ar(sound/2, ~dirt.numChannels, pan, env));
     // sound = sound * env; // MSP
@@ -603,6 +636,7 @@ SynthDef(\mspSuperhex,{|out, rate=1, sustain=1, pan, freq, accelerate |
     var tension = 0.05*freq/400 * Line.kr(1,accelerate+1, sustain);
     var loss = 1.0 - (0.01 * rate / freq);
     var sound = MembraneHexagon.ar(Decay.ar(Impulse.ar(0,0,1), 0.01), tension, loss);
+	sound = sound * \amp.kr(1);
     OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, env))
 }).add;
 
@@ -610,8 +644,14 @@ SynthDef(\mspSuperhex,{|out, rate=1, sustain=1, pan, freq, accelerate |
 
 )
 
-// Synth(\mspSuperzow);
-// Synth(\mspplucklead, []);
+/*rrand(-1.0, 1.0)
+
+Synth(\pluck, [freq: ~root]);
+Synth(\acid, [freq: ~root]);
+
+Synth(\mspSuperzow);
+Synth(\mspSuperHat, [accelerate: rrand(-1.0, 1.0), sustain: 1 * [0.5, 1, 3].choose, amp: 0.09]);
+// Synth(\mspplucklead, []);*/
 // Synth(\mspLaser, [freq: 440, sustain: 7]);
 // Synth(\mspsupergong, [decay: 0.8]);
 // Synth(\mspVibSawPlucker);
