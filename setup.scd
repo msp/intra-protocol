@@ -45,6 +45,7 @@ SuperDirt.default = ~dirt;
 // ~dirt.loadSoundFiles("/Dropbox-shared/oily-cart-awu-samples/*");
 ~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/oily-cart-awu-samples/*");
 ~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/iklectik-202209/*");
+~dirt.loadSoundFiles("/data/Dropbox-spatial/Dropbox/spatial/music/AudioSources/spectral-202312/*");
 
 
 // Run to test to check we have sound. You should hear a cymbal

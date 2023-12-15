@@ -41,14 +41,14 @@ Pdef(\industrial,
 			\type, \dirt,
 			\s, \soundfx,
 			\n, Pseq([1], inf),
-			\speed, Pseq([Prand([0.2, 0.1, 0.5, 1.2])], inf),
+			\speed, Pseq([Prand([0.2, 0.1, 0.5])], inf),
 			\dur, Pseq([8, 10, 12, Rest(10)], inf),
 			\pan, Pseq([Prand([0, 0.25, 0.75, 1])], inf),
 			\room, Pseq([0.7, 0.25, 0.75, 0.6], inf),
 			\size, Pseq([0.6, 0.25, 0.75, 0.5], inf),
 			\shape, 0.5,
 			// \crush, 4,
-			\gain, 0.85,
+			\gain, 0.65,
 			\orbit, ~out1
 		)
 	])
@@ -1258,8 +1258,8 @@ Pdef(\crackle,
 			\type, \dirt,
 			\s, \crackle,
 			\n, 0,
-			\speed, Pseq([0.7], inf),
-			\dur, 6.5,
+			\speed, Pseq([0.3, 0.1, 0.2], inf),
+			\dur, Pseq([6.5, 3, Rest(12)], inf),
 			// \begin, Pseq([0.0, 0.1, 0.2, 0.3, 0.4], inf),
 			// \end, Pseq([0.2, 0.3, 0.4, 0.5, 0.6], inf),
 			// \shape, 0.4,
@@ -1329,12 +1329,12 @@ Pdef(\volcano,
 			\s, "volcano".asSymbol,
 			\n, Pseq([Prand([0,1,2,3,4,5])], inf),
 			// \speed, 1,
-			\speed, Pseq([1, 0.5, 0.1], inf),
+			\speed, Pseq([0.1, 0.3, 0.5], inf),
 			\begin, 0,
 			// \end, 0.023,
 			// \dur, 3.43,
 			// \dur, 110,
-			\dur, Pseq([8, 16, Rest(32)], inf),
+			\dur, Pseq([128, 64, Rest(32)], inf),
 			\pan, Pseq([Prand([0.25, 0.75])], inf),
 			// \phaserrate, 0.4,
 			// \phaserdepth, 0.6,
@@ -1372,6 +1372,76 @@ Pdef(\vdmxocean,
 			// \delay, 0.5,
 			// \delayfeedback, 0.8,
 			\gain, 1.2,
+			\orbit, ~out1
+		)
+	])
+);
+
+//// Hum ///////////////////////////////////////////////////////////////////
+Pdef(\hum,
+	Ppar([
+		Pbind(
+			\type, \dirt,
+			\s, "hum".asSymbol,
+			\n,Pseq([Prand([0,1,2,3,4,5,6])], inf),
+			// \speed, 1,
+			\speed, Pseq([Prand([1.0, 0.7, 0.5, 0.3, 0.1])], inf),
+			\begin, 0,
+			// \end, 0.023,
+			// \dur, 3.43,
+			// \dur, 110,
+			\dur, Pseq([Prand([8, 16, 24, 4, Rest(30)])], inf),
+			\pan, Pseq([Prand([0.25, 0.75])], inf),
+			// \phaserrate, 0.4,
+			// \phaserdepth, 0.6,
+			\shape, 0.2,
+			\hcutoff, Pseq([30, 150, 300, 450, 750], inf),
+			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
+			// \delay, 0.5,
+			// \delayfeedback, 0.8,
+			\gain, 0.6,
+			\orbit, ~out1
+		)
+	])
+);
+
+//// Breathing ////////////////////////////////////////////////////////////
+Pdef(\breathing,
+	Ppar([
+		Pbind(
+			\type, \dirt,
+			\s, "breathing".asSymbol,
+			\n,Pseq([Prand([0,1,2,3,4,5])], inf),
+			\speed, Pseq([Prand([0.3, 0.1])], inf),
+			\begin, 0,
+			// \end, 0.023,
+			\dur, Pseq([Prand([8, 16, 24, 4])], inf),
+			\pan, Pseq([Prand([0.25, 0.75])], inf),
+			// \phaserrate, 0.4,
+			// \phaserdepth, 0.6,
+			\shape, 0.2,
+			// \hcutoff, Pseq([30, 150, 300, 450, 750], inf),
+			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
+			// \delay, 0.5,
+			// \delayfeedback, 0.8,
+			\gain, 0.9,
+			\orbit, ~out1
+		)
+	])
+);
+
+//// Impacts ////////////////////////////////////////////////////////////
+Pdef(\impacts,
+	Ppar([
+		Pbind(
+			\type, \dirt,
+			\s, "impacts".asSymbol,
+			\n,Pseq([Prand([0,1,2,3,4,5])], inf),
+			\speed, Pseq([Prand([1, 0.5, 0.3, 0.1])], inf),
+			\begin, 0,
+			\dur, Pseq([Prand([16, Rest(100)])], inf),
+			\pan, Pseq([Prand([0.25, 0.75])], inf),
+			\gain, 1.0,
 			\orbit, ~out1
 		)
 	])
