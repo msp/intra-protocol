@@ -1,3 +1,8 @@
+// srvr ////////////////////////////////////////////////////////////////////////
+
+(
+s = Server.local
+)
 
 // boot ////////////////////////////////////////////////////////////////////////
 (
@@ -28,22 +33,24 @@ PdefAllGui(Pdef.all.size);
 ~speed = 0.95;
 ~pacer = 1;
 // ~pacer = 0.05;
-// ~durations = [3, 4, 5] / 100;
-~durations = [0.2];
+~durations = [3, 4, 5] / 100;
+// ~durations = [0.4, 0.2, 0.1];
+// ~durations = [0.2, 0.1];
+
 // ~durations = [0.1, 0.3, 0.5, 0.8];
-// ~durations = [0.1, 0.02];
+// ~durations = [0.1, 0.04];
 // ~durations = [0.08, 0.02];
 ///////////////////////////////////////////
 // Edit the Pad synth for the last passage!
 ///////////////////////////////////////////
 // ~durations = [0.04];
-// ~durMult = [0.5, 1, 3, 6];
-~durMult = [3, 6, 9];
+~durMult = [0.5, 1, 3, 6];
+// ~durMult = [3, 6, 9];
 ~bassSustain = 0.7;
 // ~bassSustain = 0.5;
 ~playLFO = true;
-)
 
+)
 
 
 // pttn ////////////////////////////////////////////////////////////////////////
@@ -83,14 +90,18 @@ Routine({
 			[Synth(\msp808, [sustain: ~bassSustain, voice: -0.4, speed: 2, att: 0.01])]
 			// ++ freqs.collect { |freq| Synth(\pad, [freq: freq * bassMult]) }
 			// ++ [Synth(\kick, [duration: duration])]
+
 			// ++ [Synth(\bass3, [freq: ((~root * bassMult + j) - 24).midicps])]
-			// ++ [Synth(\mspLaser, [amp: 0.1, sustain: rrand(0.5, 2.0), freq: [140, 160, 180, 200].choose])]
 			// ++ [Synth(\mspplucklead, [sustain: duration, amp: 0.2, freq: ((~root/3) * bassMult + j).midicps])]
+
+			// ++ [Synth(\mspLaser, [amp: 0.1, sustain: rrand(0.5, 2.0), freq: [140, 160, 180, 200].choose])]
 			// ++ [Synth(\mspSuperhex, [sustain: duration * 2, amp: 0.01, freq: ((~root * 1.1 + j)).midicps])]
-			// ++ [Synth(\mspSuperzow, [amp: 0.03, sustain: duration * 2, freq: ((~root * 1.1 + j)).midicps])]
+
+			// ++ [Synth(\mspSuperzow, [amp: 0.02, sustain: duration * 2, freq: ((~root * bassMult * 1.0 + j)).midicps])]
+
 			// ++ [Synth(\acid, [freq: (~root) * (3 ** rrand(-2, 0))])]
 			// ++ [Synth(\acid, [freq: ~root * 1 * bassMult])]
-			// ++ [Synth(\pluck, [amp: 0.1, freq: ~root])]
+			++ [Synth(\pluck, [amp: 0.1, freq: ~root])]
 		);
 
 		// Synth(\mspSuperhex, [sustain: duration * 2, amp: 0.01, freq: ((~root * 1.1 + j)).midicps]);
@@ -112,7 +123,7 @@ Routine({
 
 		if(0.1.coin) {
 			duration = duration * ~durMult.choose;
-			s.bind { fx.set(\trigger, 1); };
+			// s.bind { fx.set(\trigger, 1); };
 			~oscClient.sendMsg("/fx/trigger", 1);
 			~oscClient.sendMsg("/part/tonal", 1);
 			~oscClient.sendMsg("/shader/invert", 1);
@@ -144,8 +155,23 @@ Routine({
 
 		if(0.04.coin) {
 			[1, 3].choose.do {
-				s.bind { Synth(\ghostKick); };
+				s.bind { Synth(\ghostKick, [amp: 0.8]); };
 				(~pacer * (1 / [3, 6].choose)).wait;
+
+				~oscClient.sendMsg("/fill/phrase/pulse", 0);
+
+				~oscClient.sendMsg("/fill/width", 1);
+				~oscClient.sendMsg("/fill/height", 1 * duration);
+				~oscClient.sendMsg("/fill/pulse", 1);
+				~oscClient.sendMsg("/fill/x", 1 - duration);
+				{
+					(duration / 2).wait; ~oscClient.sendMsg("/fill/pulse", 0);
+					~oscClient.sendMsg("/fill/phrase/pulse", 1);
+
+				}.fork;
+
+
+
 			};
 		};
 

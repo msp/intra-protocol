@@ -172,7 +172,7 @@ Pdef(\cymbals,
 			\comb, 0.5,
 			\hbrick, Pseq([Pwrand([0, 0.1, 0.2],[0.7, 0.2, 0.1])], inf),
 			\enhance, 0.05,
-			\gain, 0.6,
+			\gain, 0.5,
 			\orbit, ~out1
 		)
 	])
@@ -475,7 +475,7 @@ Pdef(\noise,
 			\pan, Pseq([Prand([0, 0.25, 0.75, 1])], inf),
 			\crush, 4,
 			\distort, 0.1,
-			\gain, 0.75,
+			\gain, 0.55,
 			\orbit, ~out1
 		)
 	])
@@ -1343,7 +1343,7 @@ Pdef(\volcano,
 			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
 			// \delay, 0.5,
 			// \delayfeedback, 0.8,
-			\gain, 1.5,
+			\gain, 1.8,
 			\orbit, ~out1
 		)
 	])
@@ -1415,7 +1415,7 @@ Pdef(\breathing,
 			\speed, Pseq([Prand([0.3, 0.1])], inf),
 			\begin, 0,
 			// \end, 0.023,
-			\dur, Pseq([Prand([8, 16, 24, 4])], inf),
+			\dur, Pseq([Prand([8, 16, 24, 4, Rest(32)])], inf),
 			\pan, Pseq([Prand([0.25, 0.75])], inf),
 			// \phaserrate, 0.4,
 			// \phaserdepth, 0.6,
@@ -1439,9 +1439,26 @@ Pdef(\impacts,
 			\n,Pseq([Prand([0,1,2,3,4,5])], inf),
 			\speed, Pseq([Prand([1, 0.5, 0.3, 0.1])], inf),
 			\begin, 0,
-			\dur, Pseq([Prand([16, Rest(100)])], inf),
+			\dur, Pseq([Prand([16, Rest(64)])], inf),
 			\pan, Pseq([Prand([0.25, 0.75])], inf),
 			\gain, 1.0,
+			\orbit, ~out1
+		)
+	])
+);
+
+//// Subrumble //////////////////////////////////////////////////////////
+Pdef(\subrumble,
+	Ppar([
+		Pbind(
+			\type, \dirt,
+			\s, "subrumble".asSymbol,
+			\n,Pseq([Prand([0])], inf),
+			\speed, Pseq([Prand([1])], inf),
+			\begin, 0,
+			\dur, Pseq([Prand([16, Rest(32)])], inf),
+			\pan, Pseq([Prand([0.25, 0.75])], inf),
+			\gain, 1.2,
 			\orbit, ~out1
 		)
 	])

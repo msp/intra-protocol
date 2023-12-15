@@ -45,7 +45,8 @@ SynthDef(\ghostKick, {
 	snd = snd * (1 + Env.perc(0.0, 0.5).ar);
 	snd = snd.tanh;
 	snd = snd * Env.perc(0.001, 0.1, curve: -4).ar(Done.freeSelf);
-	snd = snd * -14.dbamp;
+	snd = snd * -20.dbamp;
+	snd = snd * \amp.kr(1);
 	snd = snd ! 2;
 	Out.ar(\out.kr(0), snd);
 }).add;
@@ -507,6 +508,7 @@ SynthDef(\mspsupergong,{|out, sustain=1, pan, accelerate, freq=440, voice=0, dec
     var sound = Mix.arFill(15, {arg i; EnvGen.ar(Env.perc(att*tscale[i], 0.5*tscale[i], 0.2*ascale[i] ), timeScale:sustain*5)
         * SinOsc.ar(freq * freqlist[i] * Line.kr(1, 1+accelerate, sustain))});
 
+	sound = sound * \amp.kr(1);
 
     OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
 }).add;
