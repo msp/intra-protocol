@@ -41,6 +41,7 @@
 
 
     s = HPF.ar(o.softclip, 30);
+	s = s * -2.dbamp;
 	// OffsetOut.ar(~out1, DirtPan.ar(s, ~dirt.numChannels, 0, 0.2));
 	Out.ar(0, Pan2.ar(s, 0, 0.01));
 

@@ -188,16 +188,6 @@ Routine({
 }).play;
 )
 
-(
-Routine({
-    ((0.8 ** (0..8)).normalizeSum * 15.0).do { |phraseDuration|
-        ((0.75 ** (0..10)).normalizeSum * phraseDuration).do { |duration|
-            s.bind { Synth(\kick, [duration: duration]) };
-            duration.wait;
-        };
-    };
-}).play;
-)
 
 
 (
