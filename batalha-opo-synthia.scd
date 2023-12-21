@@ -16,6 +16,7 @@ f = {
 	~oscClient.sendMsg("/opo2/clear", 1);
 	~oscClient.sendMsg("/opo1/layer", 0);
 	~oscClient.sendMsg("/opo2/layer", 0);
+	~oscClient.sendMsg("/synthia/layer", 0);
 };
 
 ~oscClient.sendMsg("/lfo/play", 1);
@@ -73,6 +74,7 @@ var chord = [-3, 0, 2, 4, 7, 11];
 
 Routine({
 	~oscClient.sendMsg("/master/layer", 1);
+	~oscClient.sendMsg("/synthia/layer", 1);
 
 	inf.do { |i|
 		duration = ~durations.choose;
@@ -105,7 +107,7 @@ Routine({
 
 			// ++ [Synth(\acid, [freq: (~root) * (3 ** rrand(-2, 0))])]
 			// ++ [Synth(\acid, [freq: ~root * 1 * bassMult])]
-			++ [Synth(\pluck, [amp: 0.1, freq: ~root])]
+			++ [Synth(\pluck, [amp: 0.05, freq: ~root])]
 		);
 
 		// Synth(\mspSuperhex, [sustain: duration * 2, amp: 0.01, freq: ((~root * 1.1 + j)).midicps]);
@@ -114,7 +116,7 @@ Routine({
 		Routine({
 			if(0.5.coin) {
 				// (~pacer * 2).wait;
-				s.bind { fx.set(\trigger, 1); };
+				// s.bind { fx.set(\trigger, 1); };
 				Synth(\pluck, [amp: 0.1, transpose: [-3, -2, -1, 0, 1,2,3].choose])
 			};
 			(~pacer * 2).wait;
@@ -123,7 +125,7 @@ Routine({
 
 		~oscClient.sendMsg("/pulse", 1);
 
-		s.bind { fx.set(\trigger, 1); };
+		// s.bind { fx.set(\trigger, 1); };
 
 		if(0.1.coin) {
 			duration = duration * ~durMult.choose;

@@ -2,6 +2,12 @@
 // SEQUENCES
 ////////////////////////////////////////////////////////////////////////////////
 
+// subrumble
+// breathing
+// crackle
+// cymbals
+// submsp
+
 (
 // place cursor below this line and execute CMD + enter to execute the section)
 
@@ -1267,7 +1273,7 @@ Pdef(\crackle,
 			// \room, Pseq([0.55, 0.25, 0], inf),
 			// \size, Pseq([0.2, 0.55, 0.25, 0], inf),
 			\pan, Pseq([Prand([0.4, 0.6])], inf),
-			\gain, 0.8,
+			\gain, 0.6,
 			\orbit, ~out1
 		)
 	])
@@ -1343,7 +1349,7 @@ Pdef(\volcano,
 			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
 			// \delay, 0.5,
 			// \delayfeedback, 0.8,
-			\gain, 1.6,
+			\gain, 1.4,
 			\orbit, ~out1
 		)
 	])
@@ -1399,7 +1405,7 @@ Pdef(\hum,
 			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
 			// \delay, 0.5,
 			// \delayfeedback, 0.8,
-			\gain, 0.6,
+			\gain, 0.5,
 			\orbit, ~out1
 		)
 	])
@@ -1439,7 +1445,7 @@ Pdef(\impacts,
 			\n,Pseq([Prand([0,1,2,3,4,5])], inf),
 			\speed, Pseq([Prand([1, 0.5, 0.3, 0.1])], inf),
 			\begin, 0,
-			\dur, Pseq([Prand([16, Rest(64)])], inf),
+			\dur, Pseq([Prand([16, Rest(32)])], inf),
 			\pan, Pseq([Prand([0.25, 0.75])], inf),
 			\gain, 1.0,
 			\orbit, ~out1

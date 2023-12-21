@@ -3,7 +3,7 @@
 
 (
 // var sinusoidalProb = 1.0;
-var sinusoidalProb = 0.0;
+var sinusoidalProb = 0.3;
 // var reversingProb = 1.0;
 var reversingProb = 0.4;
 var loopLength = [150, 300, 500].choose;
@@ -12,8 +12,6 @@ var minWaitTime = 0.00008;
 // var minWaitTime = 0.008;
 var maxWaitTime = 1.5.rand;
 // var maxWaitTime = 0.2;
-// var maxWaitTime = 0.3;
-// var maxWaitTime = 5;
 var calcs;
 var i = 0;
 var j = 0;
