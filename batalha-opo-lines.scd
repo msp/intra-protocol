@@ -138,11 +138,13 @@ Routine {
 //// OPO2 ///////////////////////////////////////////////////////////////
 
 (
-var loopLength = [150, 300, 500].choose;
+// var loopLength = [150, 300, 500].choose;
+var loopLength = [150].choose;
 // var minWaitTime = 0.00008;
 // var minWaitTime = 0.008;
 var minWaitTime = 0.008;
-var maxWaitTime = 1.5.rand;
+// var maxWaitTime = 1.5.rand;
+var maxWaitTime = 0.2;
 // var maxWaitTime = 0.3;
 // var maxWaitTime = 5;
 var duration;
@@ -166,12 +168,13 @@ var upNR = up.reverse;
 Routine({
 	//// Left Screen ///////////////////////////////////////////
 	~oscClient.sendMsg("/opo1/clear", 0);
+	~oscClient.sendMsg("/opo1/layer", 1);
 	~oscClient.sendMsg("/master/layer", 1);
 
 	Routine({
 		up.size.do {
 			duration = up[i];
-			"Waiting: [".post; i.post; "] ".post; duration.postln;
+			// "Waiting: [".post; i.post; "] ".post; duration.postln;
 
 			// s.bind { Synth(\mspSuperhex, [sustain: 3, amp: 0.008, freq: 80 + (duration * 100)]) };
 			(type:\dirt, orbit: ~out1, s: \bouncer, n: 0, begin: 0, end: duration, speed: [1,2].choose - duration, pan: [0.0].choose, hcutoff: 50 + (duration * 5), gain: 0.8).play;
@@ -180,7 +183,7 @@ Routine({
 
 			~oscClient.sendMsg("/opo1/pulse", 1);
 			~oscClient.sendMsg("/opo1/ypos", upN[i]);
-			~oscClient.sendMsg("/opo1/height", upN[i]/10);
+			// ~oscClient.sendMsg("/opo1/height", upN[i]/10);
 			{ (duration / 2).wait; ~oscClient.sendMsg("/opo1/pulse", 0); }.fork;
 
 			duration.wait;
@@ -191,11 +194,12 @@ Routine({
 
 	//// Right Screen ////////////////////////////////////////
 	~oscClient.sendMsg("/opo2/clear", 0);
+	~oscClient.sendMsg("/opo2/layer", 0);
 
 	Routine({
-		up.reverse.size.do {
-			duration = up[i];
-			"Waiting: [".post; i.post; "] ".post; duration.postln;
+		up.size.do {
+			duration = up[j];
+			// "Waiting: [".post; i.post; "] ".post; duration.postln;
 
 			// s.bind { Synth(\mspSuperhex, [sustain: 3, amp: 0.008, freq: 80 + (duration * 100)]) };
 			// (type:\dirt, orbit: ~out1, s: \bouncer, n: 0, begin: 0, end: duration, speed: [1,2].choose - duration, pan: [0.25,0.75].choose, hcutoff: 50 + (duration * 5), gain: 0.9).play;
@@ -203,11 +207,16 @@ Routine({
 			(type:\dirt, orbit: ~out1, s: \bd, n: [0,1,2,3,4].choose, begin: 0, speed: 0.8, crush: [5,6,7,9].choose, shape: 0.8, pan: 1.0, gain: 0.8).play;
 
 			~oscClient.sendMsg("/opo2/pulse", 1);
-			~oscClient.sendMsg("/opo2/ypos", 1 - upN[i]);
+
+			if (upN[j] != nil) {
+				// upN[j].postln;
+				~oscClient.sendMsg("/opo2/ypos", 1 - upN[j]);
+			};
+
 			{ (duration / 2).wait; ~oscClient.sendMsg("/opo2/pulse", 0); }.fork;
 
 			duration.wait;
-			i = i + 1;
+			j = j + 1;
 		};
 	}).play;
 

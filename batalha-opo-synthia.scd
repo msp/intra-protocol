@@ -14,6 +14,8 @@ f = {
 	~oscClient.sendMsg("/master/layer", 0);
 	~oscClient.sendMsg("/opo1/clear", 1);
 	~oscClient.sendMsg("/opo2/clear", 1);
+	~oscClient.sendMsg("/opo1/layer", 0);
+	~oscClient.sendMsg("/opo2/layer", 0);
 };
 
 ~oscClient.sendMsg("/lfo/play", 1);
