@@ -49,7 +49,7 @@ SuperDirt.default = ~dirt;
 
 
 // Run to test to check we have sound. You should hear a cymbal
-(type:\dirt, orbit: ~out1_2, s: \bouncer, n: 0, speed: 1.0, pan: 0.25, gain: 0.8).play;
+(type:\dirt, orbit: ~out1, s: \bouncer, n: 0, speed: 1.0, pan: 0.25, gain: 0.8).play;
 (type:\dirt, orbit: ~out1_2, s: \cr, n: 0, speed: 0.3, pan: 0.75, gain: 0.6).play;
 
 

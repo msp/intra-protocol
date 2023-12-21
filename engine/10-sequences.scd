@@ -1343,7 +1343,7 @@ Pdef(\volcano,
 			// \delaytime, Pwrand([1/4, 1/2, 1/3], [10, 15, 5].normalizeSum, inf),
 			// \delay, 0.5,
 			// \delayfeedback, 0.8,
-			\gain, 1.8,
+			\gain, 1.6,
 			\orbit, ~out1
 		)
 	])
@@ -1458,7 +1458,7 @@ Pdef(\subrumble,
 			\begin, 0,
 			\dur, Pseq([Prand([16, Rest(32)])], inf),
 			\pan, Pseq([Prand([0.25, 0.75])], inf),
-			\gain, 1.2,
+			\gain, 1.3,
 			\orbit, ~out1
 		)
 	])
