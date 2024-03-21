@@ -20,7 +20,7 @@
 	// OffsetOut.ar(~out1, DirtPan.ar(s, ~dirt.numChannels, 0, 0.18));
 	// OffsetOut.ar(0, DirtPan.ar(s, ~dirt.numChannels, 0, 0.18));
 
-	s = s * -20.dbamp;
+	s = s * -16.dbamp;
 	Out.ar(0, Pan2.ar(s, 0, 0.14));
 
     }

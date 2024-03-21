@@ -7,6 +7,12 @@
 // crackle
 // cymbals
 // submsp
+// impact
+// haunted
+// hum
+// industrial
+// noise
+// pool?
 
 (
 // place cursor below this line and execute CMD + enter to execute the section)
